@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/components/ui/navbar/navbar"
 import { Hero } from "@/components/hero"
 import { Experience } from "@/components/experience"
 import { Domos } from "@/components/domos"

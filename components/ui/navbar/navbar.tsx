@@ -105,7 +105,7 @@ export function Navbar() {
               <X size={24} />
             </button>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center gap-8 pb-20">
+          <div className="flex-1 flex flex-col items-center justify-center gap-8 pb-20 bg-background">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

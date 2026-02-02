@@ -60,11 +60,15 @@ const galleryImages = [
 ];
 
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
   const [showAll, setShowAll] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<{ [key: number]: boolean }>(
+    {},
+  );
 
   const openLightbox = (index: number) => {
     setCurrentImage(index);
@@ -81,6 +85,10 @@ export function Gallery() {
 
   // Mostrar 6 o 12 imágenes según el estado
   const imagesToShow = showAll ? galleryImages : galleryImages.slice(0, 6);
+
+  const handleImageLoad = (idx: number) => {
+    setLoadedImages((prev) => ({ ...prev, [idx]: true }));
+  };
 
   return (
     <section id="galeria" className="py-20 lg:py-32 bg-card">
@@ -101,11 +109,17 @@ export function Gallery() {
             className="md:col-span-2 md:row-span-2 relative h-64 md:h-auto rounded-xl overflow-hidden cursor-pointer group"
             onClick={() => openLightbox(0)}
           >
+            {!loadedImages[0] && (
+              <Skeleton className="absolute inset-0 w-full h-full z-10" />
+            )}
             <Image
               src={imagesToShow[0].src || "/placeholder.svg"}
               alt={imagesToShow[0].alt}
               fill
               className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              onLoad={() => handleImageLoad(0)}
+              style={!loadedImages[0] ? { visibility: "hidden" } : {}}
             />
             <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors" />
           </div>
@@ -117,11 +131,17 @@ export function Gallery() {
               className="relative h-64 md:h-48 rounded-xl overflow-hidden cursor-pointer group"
               onClick={() => openLightbox(index + 1)}
             >
+              {!loadedImages[index + 1] && (
+                <Skeleton className="absolute inset-0 w-full h-full z-10" />
+              )}
               <Image
                 src={image.src || "/placeholder.svg"}
                 alt={image.alt}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                onLoad={() => handleImageLoad(index + 1)}
+                style={!loadedImages[index + 1] ? { visibility: "hidden" } : {}}
               />
               <div className="absolute inset-0 bg-foreground/0 group-hover:bg-foreground/20 transition-colors" />
             </div>
@@ -163,6 +183,7 @@ export function Gallery() {
               alt={galleryImages[currentImage].alt}
               fill
               className="object-contain"
+              loading="lazy"
             />
           </div>
 
