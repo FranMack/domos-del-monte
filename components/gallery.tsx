@@ -57,6 +57,36 @@ const galleryImages = [
     category: "Exterior",
   },
   { src: "/images/pileta-1.webp", alt: "Pileta y domo", category: "Piscina" },
+  {
+    src: "/images/interior-4.webp",
+    alt: "Domo geodésico exterior",
+    category: "Exterior",
+  },
+  {
+    src: "/images/interior-6.webp",
+    alt: "Cama dentro del domo",
+    category: "Piscina",
+  },
+  {
+    src: "/images/interior-8.webp",
+    alt: "Mesa de desayuno con frutas",
+    category: "Detalles",
+  },
+  {
+    src: "/images/interior-11.webp",
+    alt: "Baño con ducha y lavabo",
+    category: "Detalles",
+  },
+  {
+    src: "/images/interior-12.webp",
+    alt: "Cocina dentro del domo",
+    category: "Detalles",
+  },
+  {
+    src: "/images/interior-13.webp",
+    alt: "Desayuno servido en la mesa",
+    category: "Detalles",
+  },
 ];
 
 import { Button } from "@/components/ui/button";
@@ -65,7 +95,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
-  const [showAll, setShowAll] = useState(false);
+  // 0: 6 imágenes, 1: 12 imágenes, 2: todas
+  const [showLevel, setShowLevel] = useState(0);
   const [loadedImages, setLoadedImages] = useState<{ [key: number]: boolean }>(
     {},
   );
@@ -83,8 +114,10 @@ export function Gallery() {
       (prev) => (prev - 1 + galleryImages.length) % galleryImages.length,
     );
 
-  // Mostrar 6 o 12 imágenes según el estado
-  const imagesToShow = showAll ? galleryImages : galleryImages.slice(0, 6);
+  // Mostrar 6, 12 o todas las imágenes según el estado
+  let imagesToShow = galleryImages.slice(0, 6);
+  if (showLevel === 1) imagesToShow = galleryImages.slice(0, 12);
+  if (showLevel === 2) imagesToShow = galleryImages;
 
   const handleImageLoad = (idx: number) => {
     setLoadedImages((prev) => ({ ...prev, [idx]: true }));
@@ -148,12 +181,24 @@ export function Gallery() {
           ))}
         </div>
 
-        {/* Botón Ver más / Ver menos */}
+        {/* Botones Ver más / Ver menos */}
         {galleryImages.length > 6 && (
           <div className="flex justify-center mt-8">
-            <Button onClick={() => setShowAll((v) => !v)} variant="ghost">
-              {showAll ? "Ver menos" : "Ver más"}
-            </Button>
+            {showLevel === 0 && galleryImages.length > 6 && (
+              <Button onClick={() => setShowLevel(1)} variant="ghost">
+                Ver más
+              </Button>
+            )}
+            {showLevel > 0 && (
+              <Button onClick={() => setShowLevel(0)} variant="ghost">
+                Ver menos
+              </Button>
+            )}
+            {showLevel === 1 && galleryImages.length > 12 && (
+              <Button onClick={() => setShowLevel(2)} variant="ghost">
+                Ver más
+              </Button>
+            )}
           </div>
         )}
       </div>
