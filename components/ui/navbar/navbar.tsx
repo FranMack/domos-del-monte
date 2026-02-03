@@ -38,7 +38,7 @@ export function Navbar() {
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/images/logo.webp"
+            src="/logo.webp"
             alt="Domos del Monte Logo"
             width={60}
             height={60}
